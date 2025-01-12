@@ -13,6 +13,7 @@ def _(mo):
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 
@@ -39,7 +40,6 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
     from nltk.util import bigrams
     from nltk.tokenize import word_tokenize, sent_tokenize
 
-
     def read_text_file(
         file_path: str = r"../data/text_files/The Sword of Destiny.txt",
     ):
@@ -49,7 +49,6 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
 
         # Return Text File
         return text
-
 
     def text_processing(text: str) -> list[tuple[str, str]]:
         # Data Copy
@@ -81,7 +80,6 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
         # Return Text Bigram
         return bigram_list
 
-
     def frequecy_table(
         bigram_list: list[tuple[str, str]],
         frequency_cutoff: int = FREQUENCY_CUTOFF,
@@ -104,7 +102,6 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
         # Display Data
         return freq_table
 
-
     def generate_graph(freq_table: pl.DataFrame) -> nx.DiGraph:
         # Directed Graph
         d_graph = nx.from_pandas_edgelist(
@@ -117,13 +114,11 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
 
         return d_graph
 
-
     def show_histogram(freq_table: pl.DataFrame) -> None:
         px.histogram(
             data_frame=freq_table.select(pl.col("weight")),
             x="weight",
         ).show()
-
 
     def generate_sentence(
         first_word: str,
@@ -159,8 +154,7 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
                 )
                 .with_columns(pl.col("weight").struct.field("weight"))
                 .with_columns(
-                    pl.col("weight").alias("relative_proba")
-                    / pl.col("weight").max()
+                    pl.col("weight").alias("relative_proba") / pl.col("weight").max()
                 )
                 .sort("weight", descending=True)
                 .filter(pl.col("relative_proba") >= relative_proba)
@@ -177,6 +171,7 @@ def _(FREQUENCY_CUTOFF, MAX_ITER, RELATIVE_PROBA):
 
         # Print Output
         return sentence
+
     return (
         bigrams,
         frequecy_table,
